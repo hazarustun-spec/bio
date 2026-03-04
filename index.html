@@ -98,21 +98,59 @@ body::before{
 }
 .contact:hover::after{transform:scaleX(1)}
 
-/* --- Sticky categories + refinement (shrink on scroll, no shadow) --- */
+/* --- Sticky categories + refinement --- */
 .stickyCats{
   position:sticky;
   top:0;
   z-index:10;
   padding-top:10px;
   margin-top:-10px;
+
+  /* base paper wash */
   background:linear-gradient(to bottom,
     var(--paperTint) 0%,
     rgba(244,241,232,.82) 70%,
     rgba(244,241,232,0) 100%);
   backdrop-filter: blur(6px);
+
   transition: padding .22s ease;
+  isolation:isolate; /* keep blend layers contained */
 }
+
+/* ✅ Menu heat/gradient behind, not per-item */
+.stickyCats::before{
+  content:"";
+  position:absolute;
+  left:-10%;
+  right:-10%;
+  top:-20px;
+  height:160px;
+  z-index:-1;
+
+  /* messy but professional: a few blobs, not everywhere */
+  background:
+    radial-gradient(140px 110px at 18% 58%, rgba(10,85,255,.32), transparent 70%),
+    radial-gradient(180px 130px at 46% 26%, rgba(10,85,255,.22), transparent 72%),
+    radial-gradient(170px 140px at 72% 70%, rgba(10,85,255,.18), transparent 74%),
+    radial-gradient(120px 95px at 86% 44%, rgba(255,135,80,.14), transparent 70%);
+  filter: blur(18px);
+  opacity:.9;
+  transform: rotate(-4deg);
+  mix-blend-mode:multiply;
+  pointer-events:none;
+}
+
+/* when compact, calm it down a bit */
+.stickyCats.is-compact{ padding-top:6px; }
+.stickyCats.is-compact::before{
+  height:120px;
+  filter: blur(16px);
+  opacity:.75;
+  transform: rotate(-3deg);
+}
+
 .categories{
+  position:relative;
   display:flex;
   flex-wrap:wrap;
   gap:12px 18px;
@@ -123,11 +161,11 @@ body::before{
   border-bottom:1px solid var(--hair);
   transition: font-size .22s ease, gap .22s ease, padding .22s ease;
 }
-.stickyCats.is-compact{ padding-top:6px; }
+
 .stickyCats.is-compact .categories{
-  font-size:24px;            /* shrink */
-  gap:10px 14px;             /* tighter */
-  padding:10px 0 12px;        /* tighter */
+  font-size:24px;
+  gap:10px 14px;
+  padding:10px 0 12px;
 }
 
 .categories a{
@@ -162,7 +200,6 @@ body::before{
   background:var(--hair);
 }
 
-/* Whole row clickable */
 .entryLink{
   display:block;
   text-decoration:none;
@@ -194,51 +231,23 @@ body::before{
   margin:0 0 6px;
 }
 
-/* --- Title: optical alignment + editorial tracking --- */
+/* ✅ Title optical alignment + tracking */
 .title{
   font-family:"EB Garamond", Georgia, serif;
   font-size:66px;
   line-height:.95;
   margin:0;
   letter-spacing:-0.03em;
-  /* better line breaks */
   text-wrap: balance;
   hyphens: auto;
 }
-
-/* Optical alignment: slight hanging to the left (very subtle) */
 .titleOptical{
   position:relative;
   display:inline-block;
-  margin-left:-0.045em; /* micro optical margin */
-  padding-left:0.045em; /* keep actual readable box aligned */
+  margin-left:-0.045em;
+  padding-left:0.045em;
 }
 
-/* --- Gradient / “mist” behind title (editorial, messy but controlled) --- */
-.titleAura{
-  position:relative;
-  display:inline-block;
-  padding:6px 10px 12px;
-  margin-left:-10px;
-}
-.titleAura::before{
-  content:"";
-  position:absolute;
-  inset:-18px -26px -22px -26px;
-  z-index:-1;
-  /* layered organic blobs */
-  background:
-    radial-gradient(120px 90px at 18% 42%, rgba(10,85,255,.35), transparent 65%),
-    radial-gradient(160px 120px at 58% 28%, rgba(10,85,255,.28), transparent 70%),
-    radial-gradient(140px 110px at 78% 66%, rgba(10,85,255,.22), transparent 72%),
-    radial-gradient(120px 95px at 86% 40%, rgba(255,135,80,.18), transparent 68%);
-  filter: blur(14px);
-  opacity:.85;
-  transform: rotate(-3deg);
-  mix-blend-mode:multiply; /* paper + ink feel */
-}
-
-/* title underline sweep */
 .titleWrap{
   position:relative;
   display:inline-block;
@@ -308,14 +317,14 @@ body::before{
   .page{opacity:1; transform:none; transition:none;}
   .reveal{opacity:1; transform:none; transition:none;}
   .categories, .stickyCats{transition:none;}
-  .categories a::after, .contact::after, .titleWrap::after, .footer a::after{transition:none;}
   .stickyCats{backdrop-filter:none;}
+  .stickyCats::before{filter:none; opacity:.35; transform:none;}
+  .categories a::after, .contact::after, .titleWrap::after, .footer a::after{transition:none;}
   .entryLink{transition:none;}
   .entry:hover .entryLink{transform:none;}
-  .titleAura::before{filter:none; opacity:.35;}
 }
 
-/* Mobile typography + compact sticky */
+/* Mobile */
 @media(max-width:760px){
   .categories{font-size:26px}
   .stickyCats.is-compact .categories{font-size:22px}
@@ -324,8 +333,11 @@ body::before{
   .meta-value{font-size:16px}
   .title{font-size:46px; letter-spacing:-0.028em;}
   .tags{font-size:16px}
-  .titleAura{padding:4px 8px 10px; margin-left:-8px;}
-  .titleAura::before{inset:-16px -18px -18px -18px; filter: blur(12px); opacity:.8;}
+  .stickyCats::before{
+    height:140px;
+    filter: blur(16px);
+    opacity:.85;
+  }
 }
 @media(max-width:420px){
   .categories{font-size:23px; gap:10px 14px}
@@ -334,6 +346,11 @@ body::before{
   .title{font-size:42px; letter-spacing:-0.026em;}
   .entry{padding:28px 0 34px}
   .footer{padding-top:22px}
+  .stickyCats::before{
+    height:120px;
+    filter: blur(14px);
+    opacity:.82;
+  }
 }
 </style>
 </head>
@@ -377,11 +394,8 @@ body::before{
 
       <a class="entryLink" href="https://www.instagram.com/hazarvstvn/" target="_blank" rel="noopener">
         <div class="prefix">Dijital galeriye ulaş.</div>
-
         <div class="titleWrap titleOptical">
-          <span class="titleAura">
-            <h2 class="title">Fotoğraflarım</h2>
-          </span>
+          <h2 class="title">Fotoğraflarım</h2>
         </div>
       </a>
 
@@ -403,11 +417,8 @@ body::before{
 
       <a class="entryLink" href="https://varlikyayinlari.wordpress.com/2018/12/28/varlikta-bu-ay-ocak-2019/" target="_blank" rel="noopener">
         <div class="prefix">Hikayeyi oku</div>
-
         <div class="titleWrap titleOptical">
-          <span class="titleAura">
-            <h2 class="title">Varlık Dergisi,<br>2019</h2>
-          </span>
+          <h2 class="title">Varlık Dergisi,<br>2019</h2>
         </div>
       </a>
 
@@ -429,11 +440,8 @@ body::before{
 
       <a class="entryLink" href="https://www.instagram.com/bogazicimag/" target="_blank" rel="noopener">
         <div class="prefix">Dergiye git</div>
-
         <div class="titleWrap titleOptical">
-          <span class="titleAura">
-            <h2 class="title">bogazicimag</h2>
-          </span>
+          <h2 class="title">bogazicimag</h2>
         </div>
       </a>
 
@@ -454,7 +462,7 @@ body::before{
     document.getElementById("page").classList.add("is-loaded");
   });
 
-  // Scroll reveal
+  // Reveal
   (function(){
     const els = document.querySelectorAll(".reveal");
     const io = new IntersectionObserver((entries)=>{
@@ -465,7 +473,6 @@ body::before{
         }
       });
     }, { threshold: 0.12, rootMargin: "0px 0px -10% 0px" });
-
     els.forEach(el => io.observe(el));
   })();
 
