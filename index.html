@@ -18,6 +18,7 @@
   --blue:#0a55ff;
   --line:rgba(10,85,255,.25);
   --line-2:rgba(10,85,255,.18);
+  --paperTint: rgba(244,241,232,.92); /* for sticky backdrop */
 }
 
 *{box-sizing:border-box}
@@ -30,9 +31,28 @@ body{
   font-family:"Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position:relative;
+  overflow-x:hidden;
 }
 
+/* --- Paper grain overlay (subtle) --- */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  opacity:.075; /* keep it very subtle */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  background-size:220px 220px;
+  mix-blend-mode:multiply;
+}
+
+/* content above grain */
 .container{
+  position:relative;
+  z-index:1;
   max-width:900px;
   margin:auto;
   padding:
@@ -47,7 +67,7 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:22px;
+  margin-bottom:14px;
   font-size:12px;
   letter-spacing:.18em;
   text-transform:uppercase;
@@ -71,17 +91,33 @@ body{
 }
 .contact:hover::after{transform:scaleX(1)}
 
-/* --- Categories (bigger + tighter) --- */
+/* --- Sticky categories --- */
+.stickyCats{
+  position:sticky;
+  top:0;
+  z-index:10;
+  /* smooth sticky feel */
+  padding-top:10px;
+  margin-top:-10px;
+  /* sticky backdrop */
+  background:linear-gradient(to bottom,
+    var(--paperTint) 0%,
+    rgba(244,241,232,.82) 70%,
+    rgba(244,241,232,0) 100%);
+  backdrop-filter: blur(6px);
+}
+
 .categories{
   display:flex;
   flex-wrap:wrap;
   gap:12px 18px;
   font-size:30px;
   line-height:1.03;
-  margin-bottom:30px;
-  padding-bottom:18px;
+  margin:0;
+  padding:14px 0 18px;
   border-bottom:1px solid var(--line);
 }
+
 .categories a{
   color:var(--blue);
   text-decoration:none;
@@ -143,7 +179,6 @@ body{
   margin-top:12px;
 }
 
-/* clickable block */
 .entry a{
   color:var(--blue);
   text-decoration:none;
@@ -155,7 +190,7 @@ body{
 .titleWrap{
   position:relative;
   display:inline-block;
-  padding-bottom:10px; /* room for underline */
+  padding-bottom:10px;
 }
 .titleWrap::after{
   content:"";
@@ -168,9 +203,7 @@ body{
   transition:transform .26s ease;
   opacity:.75;
 }
-.entry a:hover .titleWrap::after{
-  transform:scaleX(1);
-}
+.entry a:hover .titleWrap::after{ transform:scaleX(1); }
 
 /* --- Scroll reveal (subtle) --- */
 .reveal{
@@ -186,8 +219,10 @@ body{
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce){
+  body::before{display:none;}
   .reveal{opacity:1; transform:none; transition:none;}
   .categories a::after, .contact::after, .titleWrap::after{transition:none;}
+  .stickyCats{backdrop-filter:none;}
 }
 
 /* Mobile adjustments */
@@ -214,17 +249,20 @@ body{
     <a class="contact" href="mailto:hazarustun@gmail.com">contact</a>
   </div>
 
-  <div class="categories reveal">
-    <a href="https://hazarustun.com/" target="_blank" rel="noopener">Portfolyo</a>
-    <a href="https://hazarustun.com/category/hikayeler/" target="_blank" rel="noopener">Hikayeler</a>
-    <a href="https://www.instagram.com/hazarvstvn/" target="_blank" rel="noopener">Fotoğraflar</a>
-    <a href="https://theturingjournal.com/" target="_blank" rel="noopener">The Turing Journal</a>
-    <a href="https://www.instagram.com/bogazicimag/" target="_blank" rel="noopener">bogazicimag</a>
-    <a href="https://www.instagram.com/creaitive.istanbul/" target="_blank" rel="noopener">creaitive.istanbul</a>
-    <a href="https://www.instagram.com/peraspirits/" target="_blank" rel="noopener">Pera Spirits</a>
-    <a href="https://www.instagram.com/imecemasa/" target="_blank" rel="noopener">imece masa</a>
-    <a href="https://www.hazarustun.digital/" target="_blank" rel="noopener">hudigital</a>
-    <a href="https://hazarustun.com/category/makaleler/" target="_blank" rel="noopener">makaleler</a>
+  <!-- Sticky categories wrapper -->
+  <div class="stickyCats reveal">
+    <nav class="categories" aria-label="Kategoriler">
+      <a href="https://hazarustun.com/" target="_blank" rel="noopener">Portfolyo</a>
+      <a href="https://hazarustun.com/category/hikayeler/" target="_blank" rel="noopener">Hikayeler</a>
+      <a href="https://www.instagram.com/hazarvstvn/" target="_blank" rel="noopener">Fotoğraflar</a>
+      <a href="https://theturingjournal.com/" target="_blank" rel="noopener">The Turing Journal</a>
+      <a href="https://www.instagram.com/bogazicimag/" target="_blank" rel="noopener">bogazicimag</a>
+      <a href="https://www.instagram.com/creaitive.istanbul/" target="_blank" rel="noopener">creaitive.istanbul</a>
+      <a href="https://www.instagram.com/peraspirits/" target="_blank" rel="noopener">Pera Spirits</a>
+      <a href="https://www.instagram.com/imecemasa/" target="_blank" rel="noopener">imece masa</a>
+      <a href="https://www.hazarustun.digital/" target="_blank" rel="noopener">hudigital</a>
+      <a href="https://hazarustun.com/category/makaleler/" target="_blank" rel="noopener">makaleler</a>
+    </nav>
   </div>
 
   <!-- Entry 1 -->
