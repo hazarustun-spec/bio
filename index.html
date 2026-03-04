@@ -2,178 +2,161 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Hazar — Links</title>
-  <meta name="description" content="Hazar’ın linkleri: projeler, sosyal medya, iletişim." />
-  <meta name="theme-color" content="#0b0b0b" />
-
-  <!-- Open Graph (Instagram/WhatsApp paylaşım önizlemesi) -->
-  <meta property="og:title" content="Hazar — Links" />
-  <meta property="og:description" content="Projeler, sosyal medya ve iletişim linkleri." />
-  <meta property="og:type" content="website" />
-  <!-- İstersen buraya bir görsel linki koy: -->
-  <!-- <meta property="og:image" content="https://siteadresin.com/og.jpg" /> -->
-
+  <meta name="theme-color" content="#000000" />
   <style>
+    /* ---- Base ---- */
     :root{
-      --bg:#0b0b0b; --card:#121212; --text:#f2f2f2; --muted:#a7a7a7;
-      --line:rgba(255,255,255,.10); --shadow: 0 18px 60px rgba(0,0,0,.55);
-      --radius: 18px;
+      --bg:#000;
+      --fg:#f4f4f4;
+      --muted:rgba(244,244,244,.65);
+      --hair:rgba(244,244,244,.18);
     }
     *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color:var(--text);
-      background:
-        radial-gradient(900px 500px at 50% -10%, rgba(255,255,255,.10), transparent 60%),
-        radial-gradient(800px 400px at 20% 20%, rgba(255,255,255,.06), transparent 55%),
-        var(--bg);
-      min-height:100vh;
-      display:flex;
-      justify-content:center;
-      padding:32px 16px;
+      background:var(--bg);
+      color:var(--fg);
+      /* classy serif stack (no external font needed) */
+      font-family: "Iowan Old Style","Palatino Linotype",Palatino,"Cormorant Garamond","Garamond",Georgia,serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x:hidden;
     }
-    .wrap{width:min(560px, 100%);}
-    .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    header{
-      padding:26px 22px 18px;
-      text-align:center;
-      border-bottom:1px solid var(--line);
-    }
-    .avatar{
-      width:82px;height:82px;border-radius:999px;
-      background:rgba(255,255,255,.08);
-      border:1px solid var(--line);
-      display:grid; place-items:center;
-      margin:0 auto 12px;
-      overflow:hidden;
-    }
-    .avatar img{width:100%;height:100%;object-fit:cover}
-    h1{margin:0;font-size:22px;letter-spacing:.2px}
-    p{margin:8px 0 0;color:var(--muted);font-size:14px;line-height:1.4}
-    .links{padding:18px}
-    .btn{
-      width:100%;
+
+    /* safe-area for iPhone notch */
+    .safe{
+      padding:
+        max(18px, env(safe-area-inset-top))
+        max(18px, env(safe-area-inset-right))
+        max(18px, env(safe-area-inset-bottom))
+        max(18px, env(safe-area-inset-left));
+      min-height:100svh;
+      position:relative;
       display:flex;
       align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:14px 14px;
-      margin:10px 0;
-      border-radius:14px;
-      background:rgba(18,18,18,.65);
-      border:1px solid var(--line);
-      color:var(--text);
-      text-decoration:none;
-      transition: transform .08s ease, background .15s ease, border-color .15s ease;
-      backdrop-filter: blur(6px);
     }
-    .btn:hover{transform: translateY(-1px); background:rgba(255,255,255,.06); border-color: rgba(255,255,255,.18);}
-    .left{display:flex;align-items:center;gap:12px}
-    .dot{
-      width:10px;height:10px;border-radius:99px;background:rgba(255,255,255,.55);
-      box-shadow:0 0 0 6px rgba(255,255,255,.06);
-    }
-    .label{display:flex;flex-direction:column;gap:2px}
-    .title{font-weight:600;font-size:15px}
-    .sub{font-size:12px;color:var(--muted)}
-    .arrow{opacity:.7}
-    footer{
-      padding:14px 18px 18px;
-      color:var(--muted);
+
+    /* ---- Top bar ---- */
+    .brand{
+      position:absolute;
+      top:max(14px, env(safe-area-inset-top));
+      left:max(14px, env(safe-area-inset-left));
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       font-size:12px;
-      text-align:center;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      user-select:none;
     }
-    .mini{
-      display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
-      margin-top:10px;
+    .close{
+      position:absolute;
+      top:max(10px, env(safe-area-inset-top));
+      right:max(10px, env(safe-area-inset-right));
+      width:44px;height:44px;
+      border:0;
+      background:transparent;
+      color:var(--muted);
+      cursor:pointer;
+      display:grid;
+      place-items:center;
     }
-    .mini a{
-      color:var(--muted); text-decoration:none; border-bottom:1px solid transparent;
+    .close:hover{color:var(--fg)}
+    .close svg{width:18px;height:18px}
+
+    /* ---- Menu ---- */
+    .wrap{
+      width:min(820px, 100%);
     }
-    .mini a:hover{color:var(--text); border-bottom-color: rgba(255,255,255,.35);}
+    nav{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding-top:24px;
+    }
+    .item{
+      display:inline-flex;
+      align-items:flex-end;
+      gap:12px;
+      text-decoration:none;
+      color:var(--fg);
+      line-height:0.95;
+      font-weight:500;
+      font-size: clamp(52px, 10vw, 92px);
+      letter-spacing:-0.02em;
+      position:relative;
+      width:fit-content;
+      padding:2px 0;
+      transition: transform .12s ease, opacity .12s ease;
+    }
+    .item:active{transform:scale(.99)}
+    .item::after{
+      content:"";
+      position:absolute;
+      left:0; bottom:-10px;
+      width:100%;
+      height:1px;
+      background:var(--hair);
+      transform:scaleX(0);
+      transform-origin:left;
+      transition: transform .22s ease;
+    }
+    .item:hover::after{transform:scaleX(1)}
+
+    /* optional small caption under menu */
+    .hint{
+      margin-top:22px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size:13px;
+      color:var(--muted);
+      letter-spacing:.02em;
+    }
+
+    /* subtle fade-in */
+    .fade{
+      animation: in .35s ease both;
+    }
+    @keyframes in{
+      from{opacity:0; transform: translateY(8px);}
+      to{opacity:1; transform: translateY(0);}
+    }
   </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="card">
-      <header>
-        <div class="avatar">
-          <!-- Foto eklemek istersen: avatar.jpg dosyası koyup aşağıdaki img'yi aç -->
-          <!-- <img src="avatar.jpg" alt="Hazar" /> -->
-          <span style="opacity:.9;font-weight:700;">H</span>
-        </div>
-        <h1>Hazar Üstün</h1>
-        <p>Projects • Writing • Contact</p>
-      </header>
+  <div class="safe">
+    <!-- sol üst marka -->
+    <div class="brand">PER—SONA®</div>
 
-      <main class="links">
-        <!-- Linkleri buradan düzenle -->
-        <a class="btn" href="https://hazarustun.com" target="_blank" rel="noopener">
-          <span class="left">
-            <span class="dot"></span>
-            <span class="label">
-              <span class="title">Website / Portfolio</span>
-              <span class="sub">Seçilmiş işler & projeler</span>
-            </span>
-          </span>
-          <span class="arrow">↗</span>
-        </a>
+    <!-- sağ üst kapat (instagram in-app browser’da geri git) -->
+    <button class="close" aria-label="Close" onclick="goBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
 
-        <a class="btn" href="https://instagram.com/" target="_blank" rel="noopener">
-          <span class="left">
-            <span class="dot"></span>
-            <span class="label">
-              <span class="title">Instagram</span>
-              <span class="sub">Günlük paylaşımlar</span>
-            </span>
-          </span>
-          <span class="arrow">↗</span>
-        </a>
+    <div class="wrap fade">
+      <nav>
+        <!-- ✅ Dış link yapmak istersen href="https://..." yap -->
+        <!-- ✅ Sayfa içi bölüm istersen href="#home" gibi kullan -->
+        <a class="item" href="https://hazarustun.com" target="_blank" rel="noopener">Home</a>
+        <a class="item" href="https://hazarustun.com/projects" target="_blank" rel="noopener">Catalogue</a>
+        <a class="item" href="https://hazarustun.com/about" target="_blank" rel="noopener">Studio</a>
+        <a class="item" href="mailto:youremail@example.com">Contact</a>
+      </nav>
 
-        <a class="btn" href="https://x.com/" target="_blank" rel="noopener">
-          <span class="left">
-            <span class="dot"></span>
-            <span class="label">
-              <span class="title">X (Twitter)</span>
-              <span class="sub">Notlar & fikirler</span>
-            </span>
-          </span>
-          <span class="arrow">↗</span>
-        </a>
-
-        <a class="btn" href="mailto:youremail@example.com">
-          <span class="left">
-            <span class="dot"></span>
-            <span class="label">
-              <span class="title">Email</span>
-              <span class="sub">İletişim</span>
-            </span>
-          </span>
-          <span class="arrow">✉</span>
-        </a>
-      </main>
-
-      <footer>
-        <div>© <span id="y"></span> Hazar</div>
-        <div class="mini">
-          <a href="https://linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://youtube.com/" target="_blank" rel="noopener">YouTube</a>
-          <a href="https://tiktok.com/" target="_blank" rel="noopener">TikTok</a>
-        </div>
-      </footer>
+      <div class="hint">Tap to open • Minimal bio links</div>
     </div>
   </div>
 
   <script>
-    document.getElementById("y").textContent = new Date().getFullYear();
+    function goBack(){
+      // Instagram in-app browser: çoğu zaman history var
+      if (history.length > 1) history.back();
+      else window.location.href = "https://instagram.com";
+    }
   </script>
 </body>
 </html>
