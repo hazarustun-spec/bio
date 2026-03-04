@@ -3,160 +3,260 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Hazar — Links</title>
-  <meta name="theme-color" content="#000000" />
+  <title>hazarustun</title>
+  <meta name="description" content="hazarustun — Portfolyo, hikayeler, fotoğraflar ve projeler." />
+  <meta name="theme-color" content="#f3f0e6" />
+
+  <!-- Fonts (editorial vibe) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
   <style>
-    /* ---- Base ---- */
     :root{
-      --bg:#000;
-      --fg:#f4f4f4;
-      --muted:rgba(244,244,244,.65);
-      --hair:rgba(244,244,244,.18);
+      --paper:#f3f0e6;
+      --blue:#0a55ff;         /* electric blue */
+      --hair:rgba(10,85,255,.35);
+      --hair-2:rgba(10,85,255,.22);
+      --text:var(--blue);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      background:var(--bg);
-      color:var(--fg);
-      /* classy serif stack (no external font needed) */
-      font-family: "Iowan Old Style","Palatino Linotype",Palatino,"Cormorant Garamond","Garamond",Georgia,serif;
+      background:var(--paper);
+      color:var(--text);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      overflow-x:hidden;
     }
 
-    /* safe-area for iPhone notch */
     .safe{
       padding:
         max(18px, env(safe-area-inset-top))
         max(18px, env(safe-area-inset-right))
-        max(18px, env(safe-area-inset-bottom))
+        max(22px, env(safe-area-inset-bottom))
         max(18px, env(safe-area-inset-left));
       min-height:100svh;
-      position:relative;
+    }
+    .wrap{
+      width:min(860px, 100%);
+      margin:0 auto;
+    }
+
+    /* top bar */
+    .topbar{
       display:flex;
       align-items:center;
-    }
-
-    /* ---- Top bar ---- */
-    .brand{
-      position:absolute;
-      top:max(14px, env(safe-area-inset-top));
-      left:max(14px, env(safe-area-inset-left));
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      font-size:12px;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      color:var(--muted);
-      user-select:none;
-    }
-    .close{
-      position:absolute;
-      top:max(10px, env(safe-area-inset-top));
-      right:max(10px, env(safe-area-inset-right));
-      width:44px;height:44px;
-      border:0;
-      background:transparent;
-      color:var(--muted);
-      cursor:pointer;
-      display:grid;
-      place-items:center;
-    }
-    .close:hover{color:var(--fg)}
-    .close svg{width:18px;height:18px}
-
-    /* ---- Menu ---- */
-    .wrap{
-      width:min(820px, 100%);
-    }
-    nav{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      padding-top:24px;
-    }
-    .item{
-      display:inline-flex;
-      align-items:flex-end;
+      justify-content:space-between;
+      margin-bottom:12px;
       gap:12px;
+    }
+    .brand{
+      font-family:"Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size:12px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      opacity:.9;
+    }
+    .contact{
+      font-family:"Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size:12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
       text-decoration:none;
-      color:var(--fg);
-      line-height:0.95;
+      color:var(--text);
+      border-bottom:1px solid transparent;
+      opacity:.9;
+      white-space:nowrap;
+    }
+    .contact:hover{border-bottom-color:var(--hair)}
+
+    /* category nav */
+    .cats{
+      display:flex;
+      flex-wrap:wrap;
+      gap:18px;
+      padding:14px 0 18px;
+      border-bottom:1px solid var(--hair);
+      margin-bottom:18px;
+    }
+    .cat{
+      font-family:"Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size:22px;
+      line-height:1;
+      text-decoration:none;
+      color:var(--text);
+      border-bottom:1px solid transparent;
+    }
+    .cat:hover{border-bottom-color:var(--hair)}
+
+    /* entries */
+    .entry{
+      padding:18px 0 22px;
+      border-bottom:1px solid var(--hair);
+    }
+    .meta{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-bottom:10px;
+      font-family:"Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+    .meta .label{opacity:.9}
+    .meta .value{
+      display:block;
+      font-size:18px;
+      letter-spacing:0;
+      text-transform:none;
+      margin-top:6px;
+      font-family:"Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+
+    .title{
+      margin:0;
+      font-family:"EB Garamond", Georgia, serif;
       font-weight:500;
-      font-size: clamp(52px, 10vw, 92px);
-      letter-spacing:-0.02em;
-      position:relative;
+      letter-spacing:-0.01em;
+      line-height:0.95;
+      font-size: clamp(44px, 7.2vw, 72px);
+    }
+
+    .prefix{
+      margin:0 0 6px;
+      font-family:"Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size:18px;
+      letter-spacing:0;
+      opacity:.95;
+    }
+
+    .tags{
+      margin-top:10px;
+      font-family:"Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size:18px;
+      opacity:.95;
+    }
+
+    .entryLink{
+      text-decoration:none;
+      color:var(--text);
+      display:block;
       width:fit-content;
-      padding:2px 0;
-      transition: transform .12s ease, opacity .12s ease;
+      max-width:100%;
     }
-    .item:active{transform:scale(.99)}
-    .item::after{
-      content:"";
-      position:absolute;
-      left:0; bottom:-10px;
-      width:100%;
-      height:1px;
-      background:var(--hair);
-      transform:scaleX(0);
-      transform-origin:left;
-      transition: transform .22s ease;
+    .entryLink:hover .title{
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 6px;
     }
-    .item:hover::after{transform:scaleX(1)}
 
-    /* optional small caption under menu */
-    .hint{
-      margin-top:22px;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    .note{
+      margin-top:18px;
+      font-family:"Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       font-size:13px;
-      color:var(--muted);
-      letter-spacing:.02em;
+      opacity:.75;
     }
 
-    /* subtle fade-in */
-    .fade{
-      animation: in .35s ease both;
-    }
-    @keyframes in{
-      from{opacity:0; transform: translateY(8px);}
-      to{opacity:1; transform: translateY(0);}
+    @media (max-width:520px){
+      .cats{gap:14px}
+      .cat{font-size:20px}
+      .meta{grid-template-columns: 1fr 1fr}
+      .meta .value{font-size:16px}
+      .prefix{font-size:16px}
+      .tags{font-size:16px}
     }
   </style>
 </head>
 
 <body>
   <div class="safe">
-    <!-- sol üst marka -->
-    <div class="brand">PER—SONA®</div>
+    <div class="wrap">
 
-    <!-- sağ üst kapat (instagram in-app browser’da geri git) -->
-    <button class="close" aria-label="Close" onclick="goBack()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M18 6L6 18M6 6l12 12"/>
-      </svg>
-    </button>
+      <div class="topbar">
+        <div class="brand">hazarustun</div>
+        <a class="contact" href="mailto:hazarustun@gmail.com">contact</a>
+      </div>
 
-    <div class="wrap fade">
-      <nav>
-        <!-- ✅ Dış link yapmak istersen href="https://..." yap -->
-        <!-- ✅ Sayfa içi bölüm istersen href="#home" gibi kullan -->
-        <a class="item" href="https://hazarustun.com" target="_blank" rel="noopener">Home</a>
-        <a class="item" href="https://hazarustun.com/projects" target="_blank" rel="noopener">Catalogue</a>
-        <a class="item" href="https://hazarustun.com/about" target="_blank" rel="noopener">Studio</a>
-        <a class="item" href="mailto:youremail@example.com">Contact</a>
+      <!-- Categories -->
+      <nav class="cats" aria-label="Kategoriler">
+        <a class="cat" href="https://hazarustun.com/" target="_blank" rel="noopener">Portfolyo</a>
+        <a class="cat" href="https://hazarustun.com/category/hikayeler/" target="_blank" rel="noopener">Hikayeler</a>
+        <a class="cat" href="https://www.instagram.com/hazarvstvn/" target="_blank" rel="noopener">Fotoğraflar</a>
+        <a class="cat" href="https://theturingjournal.com/" target="_blank" rel="noopener">The Turing Journal</a>
+        <a class="cat" href="https://www.instagram.com/bogazicimag/" target="_blank" rel="noopener">bogazicimag</a>
+        <a class="cat" href="https://www.instagram.com/creaitive.istanbul/" target="_blank" rel="noopener">creaitive.istanbul</a>
+        <a class="cat" href="https://www.instagram.com/peraspirits/" target="_blank" rel="noopener">Pera Spirits</a>
+        <a class="cat" href="https://www.instagram.com/imecemasa/" target="_blank" rel="noopener">imece masa</a>
+        <a class="cat" href="https://www.hazarustun.digital/" target="_blank" rel="noopener">hudigital</a>
+        <a class="cat" href="https://hazarustun.com/category/makaleler/" target="_blank" rel="noopener">makaleler</a>
       </nav>
 
-      <div class="hint">Tap to open • Minimal bio links</div>
+      <!-- Entry 1 -->
+      <section class="entry">
+        <div class="meta">
+          <div>
+            <span class="label">DATE</span>
+            <span class="value">12 Aralık 2025</span>
+          </div>
+          <div>
+            <span class="label">READ</span>
+            <span class="value">2017-2026 Fotoğrafları görüntüle</span>
+          </div>
+        </div>
+
+        <a class="entryLink" href="https://www.instagram.com/hazarvstvn/" target="_blank" rel="noopener">
+          <p class="prefix">Dijital galeriye ulaş.</p>
+          <h2 class="title">Fotoğraflarım</h2>
+        </a>
+
+        <div class="tags">Photography, Monochrome, Gallery</div>
+      </section>
+
+      <!-- Entry 2 -->
+      <section class="entry">
+        <div class="meta">
+          <div>
+            <span class="label">DATE</span>
+            <span class="value">03 Ocak 2019</span>
+          </div>
+          <div>
+            <span class="label">READ</span>
+            <span class="value">Tuzak hikayesini oku</span>
+          </div>
+        </div>
+
+        <a class="entryLink" href="https://varlikyayinlari.wordpress.com/2018/12/28/varlikta-bu-ay-ocak-2019/" target="_blank" rel="noopener">
+          <p class="prefix">Hikayeyi oku</p>
+          <h2 class="title">Varlık Dergisi, 2019</h2>
+        </a>
+
+        <div class="tags">Stories, Creative Writing, Magazine</div>
+      </section>
+
+      <!-- Entry 3 -->
+      <section class="entry">
+        <div class="meta">
+          <div>
+            <span class="label">DATE</span>
+            <span class="value">11 Aralık 2023</span>
+          </div>
+          <div>
+            <span class="label">READ</span>
+            <span class="value">bogazicimag, subculture magazine</span>
+          </div>
+        </div>
+
+        <a class="entryLink" href="https://www.instagram.com/bogazicimag/" target="_blank" rel="noopener">
+          <p class="prefix">Dergiye git</p>
+          <h2 class="title">bogazicimag</h2>
+        </a>
+
+        <div class="tags">Magazine, Storytelling, Creative</div>
+      </section>
+
     </div>
   </div>
-
-  <script>
-    function goBack(){
-      // Instagram in-app browser: çoğu zaman history var
-      if (history.length > 1) history.back();
-      else window.location.href = "https://instagram.com";
-    }
-  </script>
 </body>
 </html>
