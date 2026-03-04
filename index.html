@@ -17,7 +17,6 @@
   --paper:#f4f1e8;
   --blue:#0a55ff;
   --line:rgba(10,85,255,.25);
-  --line-2:rgba(10,85,255,.18);
   --paperTint: rgba(244,241,232,.92); /* for sticky backdrop */
 }
 
@@ -35,6 +34,17 @@ body{
   overflow-x:hidden;
 }
 
+/* --- Loading fade (whole page) --- */
+.page{
+  opacity:0;
+  transform: translateY(6px);
+  transition: opacity .45s ease, transform .45s ease;
+}
+.page.is-loaded{
+  opacity:1;
+  transform: translateY(0);
+}
+
 /* --- Paper grain overlay (subtle) --- */
 body::before{
   content:"";
@@ -42,7 +52,7 @@ body::before{
   inset:0;
   pointer-events:none;
   z-index:0;
-  opacity:.075; /* keep it very subtle */
+  opacity:.075;
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
   background-size:220px 220px;
@@ -96,10 +106,8 @@ body::before{
   position:sticky;
   top:0;
   z-index:10;
-  /* smooth sticky feel */
   padding-top:10px;
   margin-top:-10px;
-  /* sticky backdrop */
   background:linear-gradient(to bottom,
     var(--paperTint) 0%,
     rgba(244,241,232,.82) 70%,
@@ -137,18 +145,32 @@ body::before{
 }
 .categories a:hover::after{transform:scaleX(1)}
 
-/* --- Entry list --- */
+/* --- Entries --- */
+/* spacing improvement: more editorial air */
 .entry{
-  padding:26px 0;
+  padding:38px 0 42px;
   border-bottom:1px solid var(--line);
 }
 
-/* magazine grid: DATE / READ */
+/* clickable area: whole row */
+.entryLink{
+  display:block;
+  text-decoration:none;
+  color:var(--blue);
+  max-width:100%;
+  transition: transform .18s ease;
+}
+
+/* micro movement on hover */
+.entry:hover .entryLink{
+  transform: translateY(-1px);
+}
+
 .meta{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:18px;
-  margin-bottom:12px;
+  margin-bottom:14px;
 }
 .meta-label{
   font-size:11px;
@@ -160,11 +182,11 @@ body::before{
   margin-top:6px;
 }
 
-/* prefix + title */
 .prefix{
   font-size:22px;
   margin:0 0 6px;
 }
+
 .title{
   font-family:"EB Garamond", Georgia, serif;
   font-size:66px;
@@ -173,20 +195,7 @@ body::before{
   letter-spacing:-0.02em;
 }
 
-/* tags */
-.tags{
-  font-size:20px;
-  margin-top:12px;
-}
-
-.entry a{
-  color:var(--blue);
-  text-decoration:none;
-  display:inline-block;
-  max-width:100%;
-}
-
-/* Hover underline sweep on title */
+/* underline sweep on title */
 .titleWrap{
   position:relative;
   display:inline-block;
@@ -203,7 +212,43 @@ body::before{
   transition:transform .26s ease;
   opacity:.75;
 }
-.entry a:hover .titleWrap::after{ transform:scaleX(1); }
+.entry:hover .titleWrap::after{ transform:scaleX(1); }
+
+.tags{
+  font-size:20px;
+  margin-top:14px;
+}
+
+/* --- Footer --- */
+.footer{
+  padding:28px 0 0;
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  font-size:12px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  opacity:.85;
+}
+.footer a{
+  color:var(--blue);
+  text-decoration:none;
+  position:relative;
+  padding-bottom:2px;
+}
+.footer a::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height:1px;
+  background:var(--blue);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .22s ease;
+  opacity:.65;
+}
+.footer a:hover::after{transform:scaleX(1)}
 
 /* --- Scroll reveal (subtle) --- */
 .reveal{
@@ -217,126 +262,146 @@ body::before{
   transform: translateY(0);
 }
 
-/* Respect reduced motion */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce){
   body::before{display:none;}
+  .page{opacity:1; transform:none; transition:none;}
   .reveal{opacity:1; transform:none; transition:none;}
-  .categories a::after, .contact::after, .titleWrap::after{transition:none;}
+  .categories a::after, .contact::after, .titleWrap::after, .footer a::after{transition:none;}
   .stickyCats{backdrop-filter:none;}
+  .entryLink{transition:none;}
+  .entry:hover .entryLink{transform:none;}
 }
 
-/* Mobile adjustments */
+/* --- Mobile typography upgrade --- */
 @media(max-width:760px){
   .categories{font-size:26px}
-  .title{font-size:50px}
-  .prefix{font-size:20px}
-  .tags{font-size:18px}
-}
-@media(max-width:420px){
-  .categories{font-size:24px}
-  .meta{gap:12px}
+  .entry{padding:32px 0 34px}
+  .prefix{font-size:18px}
   .meta-value{font-size:16px}
   .title{font-size:46px}
+  .tags{font-size:16px}
+}
+@media(max-width:420px){
+  .categories{font-size:23px; gap:10px 14px}
+  .meta{gap:12px}
+  .title{font-size:42px}
+  .entry{padding:28px 0 30px}
+  .footer{padding-top:22px}
 }
 </style>
 </head>
 
 <body>
-<div class="container">
+<div class="page" id="page">
+  <div class="container">
 
-  <div class="topbar reveal">
-    <div>hazarustun</div>
-    <a class="contact" href="mailto:hazarustun@gmail.com">contact</a>
-  </div>
-
-  <!-- Sticky categories wrapper -->
-  <div class="stickyCats reveal">
-    <nav class="categories" aria-label="Kategoriler">
-      <a href="https://hazarustun.com/" target="_blank" rel="noopener">Portfolyo</a>
-      <a href="https://hazarustun.com/category/hikayeler/" target="_blank" rel="noopener">Hikayeler</a>
-      <a href="https://www.instagram.com/hazarvstvn/" target="_blank" rel="noopener">Fotoğraflar</a>
-      <a href="https://theturingjournal.com/" target="_blank" rel="noopener">The Turing Journal</a>
-      <a href="https://www.instagram.com/bogazicimag/" target="_blank" rel="noopener">bogazicimag</a>
-      <a href="https://www.instagram.com/creaitive.istanbul/" target="_blank" rel="noopener">creaitive.istanbul</a>
-      <a href="https://www.instagram.com/peraspirits/" target="_blank" rel="noopener">Pera Spirits</a>
-      <a href="https://www.instagram.com/imecemasa/" target="_blank" rel="noopener">imece masa</a>
-      <a href="https://www.hazarustun.digital/" target="_blank" rel="noopener">hudigital</a>
-      <a href="https://hazarustun.com/category/makaleler/" target="_blank" rel="noopener">makaleler</a>
-    </nav>
-  </div>
-
-  <!-- Entry 1 -->
-  <div class="entry reveal">
-    <div class="meta">
-      <div>
-        <div class="meta-label">DATE</div>
-        <div class="meta-value">12 Aralık 2025</div>
-      </div>
-      <div>
-        <div class="meta-label">READ</div>
-        <div class="meta-value">2017-2026 Fotoğrafları görüntüle</div>
-      </div>
+    <div class="topbar reveal">
+      <div>hazarustun</div>
+      <a class="contact" href="mailto:hazarustun@gmail.com">contact</a>
     </div>
 
-    <a href="https://www.instagram.com/hazarvstvn/" target="_blank" rel="noopener">
-      <div class="prefix">Dijital galeriye ulaş.</div>
-      <div class="titleWrap">
-        <h2 class="title">Fotoğraflarım</h2>
-      </div>
-    </a>
-
-    <div class="tags">Photography, Monochrome, Gallery</div>
-  </div>
-
-  <!-- Entry 2 -->
-  <div class="entry reveal">
-    <div class="meta">
-      <div>
-        <div class="meta-label">DATE</div>
-        <div class="meta-value">03 Ocak 2019</div>
-      </div>
-      <div>
-        <div class="meta-label">READ</div>
-        <div class="meta-value">Tuzak hikayesini oku</div>
-      </div>
+    <div class="stickyCats reveal">
+      <nav class="categories" aria-label="Kategoriler">
+        <a href="https://hazarustun.com/" target="_blank" rel="noopener">Portfolyo</a>
+        <a href="https://hazarustun.com/category/hikayeler/" target="_blank" rel="noopener">Hikayeler</a>
+        <a href="https://www.instagram.com/hazarvstvn/" target="_blank" rel="noopener">Fotoğraflar</a>
+        <a href="https://theturingjournal.com/" target="_blank" rel="noopener">The Turing Journal</a>
+        <a href="https://www.instagram.com/bogazicimag/" target="_blank" rel="noopener">bogazicimag</a>
+        <a href="https://www.instagram.com/creaitive.istanbul/" target="_blank" rel="noopener">creaitive.istanbul</a>
+        <a href="https://www.instagram.com/peraspirits/" target="_blank" rel="noopener">Pera Spirits</a>
+        <a href="https://www.instagram.com/imecemasa/" target="_blank" rel="noopener">imece masa</a>
+        <a href="https://www.hazarustun.digital/" target="_blank" rel="noopener">hudigital</a>
+        <a href="https://hazarustun.com/category/makaleler/" target="_blank" rel="noopener">makaleler</a>
+      </nav>
     </div>
 
-    <a href="https://varlikyayinlari.wordpress.com/2018/12/28/varlikta-bu-ay-ocak-2019/" target="_blank" rel="noopener">
-      <div class="prefix">Hikayeyi oku</div>
-      <div class="titleWrap">
-        <h2 class="title">Varlık Dergisi,<br>2019</h2>
+    <!-- Entry 1 -->
+    <section class="entry reveal">
+      <div class="meta">
+        <div>
+          <div class="meta-label">DATE</div>
+          <div class="meta-value">12 Aralık 2025</div>
+        </div>
+        <div>
+          <div class="meta-label">READ</div>
+          <div class="meta-value">2017-2026 Fotoğrafları görüntüle</div>
+        </div>
       </div>
-    </a>
 
-    <div class="tags">Stories, Creative Writing, Magazine</div>
-  </div>
+      <a class="entryLink" href="https://www.instagram.com/hazarvstvn/" target="_blank" rel="noopener">
+        <div class="prefix">Dijital galeriye ulaş.</div>
+        <div class="titleWrap">
+          <h2 class="title">Fotoğraflarım</h2>
+        </div>
+      </a>
 
-  <!-- Entry 3 -->
-  <div class="entry reveal">
-    <div class="meta">
+      <div class="tags">Photography, Monochrome, Gallery</div>
+    </section>
+
+    <!-- Entry 2 -->
+    <section class="entry reveal">
+      <div class="meta">
+        <div>
+          <div class="meta-label">DATE</div>
+          <div class="meta-value">03 Ocak 2019</div>
+        </div>
+        <div>
+          <div class="meta-label">READ</div>
+          <div class="meta-value">Tuzak hikayesini oku</div>
+        </div>
+      </div>
+
+      <a class="entryLink" href="https://varlikyayinlari.wordpress.com/2018/12/28/varlikta-bu-ay-ocak-2019/" target="_blank" rel="noopener">
+        <div class="prefix">Hikayeyi oku</div>
+        <div class="titleWrap">
+          <h2 class="title">Varlık Dergisi,<br>2019</h2>
+        </div>
+      </a>
+
+      <div class="tags">Stories, Creative Writing, Magazine</div>
+    </section>
+
+    <!-- Entry 3 -->
+    <section class="entry reveal">
+      <div class="meta">
+        <div>
+          <div class="meta-label">DATE</div>
+          <div class="meta-value">11 Aralık 2023</div>
+        </div>
+        <div>
+          <div class="meta-label">READ</div>
+          <div class="meta-value">bogazicimag, subculture magazine</div>
+        </div>
+      </div>
+
+      <a class="entryLink" href="https://www.instagram.com/bogazicimag/" target="_blank" rel="noopener">
+        <div class="prefix">Dergiye git</div>
+        <div class="titleWrap">
+          <h2 class="title">bogazicimag</h2>
+        </div>
+      </a>
+
+      <div class="tags">Magazine, Storytelling, Creative</div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer reveal">
+      <div>© <span id="y"></span> hazarustun</div>
       <div>
-        <div class="meta-label">DATE</div>
-        <div class="meta-value">11 Aralık 2023</div>
+        <a href="mailto:hazarustun@gmail.com">hazarustun@gmail.com</a>
       </div>
-      <div>
-        <div class="meta-label">READ</div>
-        <div class="meta-value">bogazicimag, subculture magazine</div>
-      </div>
-    </div>
+    </footer>
 
-    <a href="https://www.instagram.com/bogazicimag/" target="_blank" rel="noopener">
-      <div class="prefix">Dergiye git</div>
-      <div class="titleWrap">
-        <h2 class="title">bogazicimag</h2>
-      </div>
-    </a>
-
-    <div class="tags">Magazine, Storytelling, Creative</div>
   </div>
-
 </div>
 
 <script>
+  // Loading fade
+  window.addEventListener("load", () => {
+    document.getElementById("page").classList.add("is-loaded");
+  });
+
   // Subtle scroll reveal
   (function(){
     const els = document.querySelectorAll(".reveal");
@@ -351,6 +416,9 @@ body::before{
 
     els.forEach(el => io.observe(el));
   })();
+
+  // Footer year
+  document.getElementById("y").textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
