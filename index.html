@@ -16,7 +16,7 @@
 :root{
   --paper:#f4f1e8;
   --blue:#0a55ff;
-  --hair:rgba(10,85,255,.22);   /* lighter, hairline vibe */
+  --hair:rgba(10,85,255,.22);
   --paperTint: rgba(244,241,232,.92);
 }
 
@@ -40,10 +40,7 @@ body{
   transform: translateY(6px);
   transition: opacity .45s ease, transform .45s ease;
 }
-.page.is-loaded{
-  opacity:1;
-  transform: translateY(0);
-}
+.page.is-loaded{ opacity:1; transform: translateY(0); }
 
 /* Paper grain overlay */
 body::before{
@@ -59,11 +56,11 @@ body::before{
   mix-blend-mode:multiply;
 }
 
-/* ✅ Text max width: more editorial */
+/* Text max width (editorial) */
 .container{
   position:relative;
   z-index:1;
-  max-width:760px;   /* changed from 900 */
+  max-width:760px;
   margin:auto;
   padding:
     max(22px, env(safe-area-inset-top))
@@ -101,7 +98,7 @@ body::before{
 }
 .contact:hover::after{transform:scaleX(1)}
 
-/* Sticky categories */
+/* --- Sticky categories + refinement (shrink on scroll, no shadow) --- */
 .stickyCats{
   position:sticky;
   top:0;
@@ -113,8 +110,8 @@ body::before{
     rgba(244,241,232,.82) 70%,
     rgba(244,241,232,0) 100%);
   backdrop-filter: blur(6px);
+  transition: padding .22s ease;
 }
-
 .categories{
   display:flex;
   flex-wrap:wrap;
@@ -124,6 +121,13 @@ body::before{
   margin:0;
   padding:14px 0 18px;
   border-bottom:1px solid var(--hair);
+  transition: font-size .22s ease, gap .22s ease, padding .22s ease;
+}
+.stickyCats.is-compact{ padding-top:6px; }
+.stickyCats.is-compact .categories{
+  font-size:24px;            /* shrink */
+  gap:10px 14px;             /* tighter */
+  padding:10px 0 12px;        /* tighter */
 }
 
 .categories a{
@@ -148,20 +152,17 @@ body::before{
 /* Entries */
 .entry{
   position:relative;
-  padding:38px 0 46px; /* a touch more breathing room */
+  padding:38px 0 46px;
 }
-
-/* ✅ Entry separator improvement: controlled hairline, not boxy */
 .entry::after{
   content:"";
   position:absolute;
   left:0; right:0; bottom:0;
   height:1px;
   background:var(--hair);
-  transform: translateZ(0);
 }
 
-/* full row clickable */
+/* Whole row clickable */
 .entryLink{
   display:block;
   text-decoration:none;
@@ -169,11 +170,9 @@ body::before{
   max-width:100%;
   transition: transform .18s ease;
 }
-.entry:hover .entryLink{
-  transform: translateY(-1px);
-}
+.entry:hover .entryLink{ transform: translateY(-1px); }
 
-/* magazine grid: DATE / READ */
+/* DATE/READ */
 .meta{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -195,16 +194,51 @@ body::before{
   margin:0 0 6px;
 }
 
-/* ✅ Title tracking: more editorial */
+/* --- Title: optical alignment + editorial tracking --- */
 .title{
   font-family:"EB Garamond", Georgia, serif;
   font-size:66px;
   line-height:.95;
   margin:0;
-  letter-spacing:-0.03em; /* adjusted */
+  letter-spacing:-0.03em;
+  /* better line breaks */
+  text-wrap: balance;
+  hyphens: auto;
 }
 
-/* underline sweep on title */
+/* Optical alignment: slight hanging to the left (very subtle) */
+.titleOptical{
+  position:relative;
+  display:inline-block;
+  margin-left:-0.045em; /* micro optical margin */
+  padding-left:0.045em; /* keep actual readable box aligned */
+}
+
+/* --- Gradient / “mist” behind title (editorial, messy but controlled) --- */
+.titleAura{
+  position:relative;
+  display:inline-block;
+  padding:6px 10px 12px;
+  margin-left:-10px;
+}
+.titleAura::before{
+  content:"";
+  position:absolute;
+  inset:-18px -26px -22px -26px;
+  z-index:-1;
+  /* layered organic blobs */
+  background:
+    radial-gradient(120px 90px at 18% 42%, rgba(10,85,255,.35), transparent 65%),
+    radial-gradient(160px 120px at 58% 28%, rgba(10,85,255,.28), transparent 70%),
+    radial-gradient(140px 110px at 78% 66%, rgba(10,85,255,.22), transparent 72%),
+    radial-gradient(120px 95px at 86% 40%, rgba(255,135,80,.18), transparent 68%);
+  filter: blur(14px);
+  opacity:.85;
+  transform: rotate(-3deg);
+  mix-blend-mode:multiply; /* paper + ink feel */
+}
+
+/* title underline sweep */
 .titleWrap{
   position:relative;
   display:inline-block;
@@ -259,40 +293,43 @@ body::before{
 }
 .footer a:hover::after{transform:scaleX(1)}
 
-/* Scroll reveal */
+/* Reveal */
 .reveal{
   opacity:0;
   transform: translateY(10px);
   transition: opacity .55s ease, transform .55s ease;
   will-change: opacity, transform;
 }
-.reveal.is-in{
-  opacity:1;
-  transform: translateY(0);
-}
+.reveal.is-in{ opacity:1; transform: translateY(0); }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce){
   body::before{display:none;}
   .page{opacity:1; transform:none; transition:none;}
   .reveal{opacity:1; transform:none; transition:none;}
+  .categories, .stickyCats{transition:none;}
   .categories a::after, .contact::after, .titleWrap::after, .footer a::after{transition:none;}
   .stickyCats{backdrop-filter:none;}
   .entryLink{transition:none;}
   .entry:hover .entryLink{transform:none;}
+  .titleAura::before{filter:none; opacity:.35;}
 }
 
-/* Mobile typography */
+/* Mobile typography + compact sticky */
 @media(max-width:760px){
   .categories{font-size:26px}
+  .stickyCats.is-compact .categories{font-size:22px}
   .entry{padding:32px 0 38px}
   .prefix{font-size:18px}
   .meta-value{font-size:16px}
   .title{font-size:46px; letter-spacing:-0.028em;}
   .tags{font-size:16px}
+  .titleAura{padding:4px 8px 10px; margin-left:-8px;}
+  .titleAura::before{inset:-16px -18px -18px -18px; filter: blur(12px); opacity:.8;}
 }
 @media(max-width:420px){
   .categories{font-size:23px; gap:10px 14px}
+  .stickyCats.is-compact .categories{font-size:20px}
   .meta{gap:12px}
   .title{font-size:42px; letter-spacing:-0.026em;}
   .entry{padding:28px 0 34px}
@@ -310,7 +347,7 @@ body::before{
       <a class="contact" href="mailto:hazarustun@gmail.com">contact</a>
     </div>
 
-    <div class="stickyCats reveal">
+    <div class="stickyCats reveal" id="stickyCats">
       <nav class="categories" aria-label="Kategoriler">
         <a href="https://hazarustun.com/" target="_blank" rel="noopener">Portfolyo</a>
         <a href="https://hazarustun.com/category/hikayeler/" target="_blank" rel="noopener">Hikayeler</a>
@@ -340,8 +377,11 @@ body::before{
 
       <a class="entryLink" href="https://www.instagram.com/hazarvstvn/" target="_blank" rel="noopener">
         <div class="prefix">Dijital galeriye ulaş.</div>
-        <div class="titleWrap">
-          <h2 class="title">Fotoğraflarım</h2>
+
+        <div class="titleWrap titleOptical">
+          <span class="titleAura">
+            <h2 class="title">Fotoğraflarım</h2>
+          </span>
         </div>
       </a>
 
@@ -363,8 +403,11 @@ body::before{
 
       <a class="entryLink" href="https://varlikyayinlari.wordpress.com/2018/12/28/varlikta-bu-ay-ocak-2019/" target="_blank" rel="noopener">
         <div class="prefix">Hikayeyi oku</div>
-        <div class="titleWrap">
-          <h2 class="title">Varlık Dergisi,<br>2019</h2>
+
+        <div class="titleWrap titleOptical">
+          <span class="titleAura">
+            <h2 class="title">Varlık Dergisi,<br>2019</h2>
+          </span>
         </div>
       </a>
 
@@ -386,8 +429,11 @@ body::before{
 
       <a class="entryLink" href="https://www.instagram.com/bogazicimag/" target="_blank" rel="noopener">
         <div class="prefix">Dergiye git</div>
-        <div class="titleWrap">
-          <h2 class="title">bogazicimag</h2>
+
+        <div class="titleWrap titleOptical">
+          <span class="titleAura">
+            <h2 class="title">bogazicimag</h2>
+          </span>
         </div>
       </a>
 
@@ -421,6 +467,17 @@ body::before{
     }, { threshold: 0.12, rootMargin: "0px 0px -10% 0px" });
 
     els.forEach(el => io.observe(el));
+  })();
+
+  // Sticky header refinement: compact on scroll
+  (function(){
+    const sticky = document.getElementById("stickyCats");
+    const onScroll = () => {
+      const y = window.scrollY || document.documentElement.scrollTop;
+      sticky.classList.toggle("is-compact", y > 18);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive:true });
   })();
 
   // Footer year
