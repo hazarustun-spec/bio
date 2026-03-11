@@ -34,7 +34,6 @@ body{
   overflow-x:hidden;
 }
 
-/* Loading fade */
 .page{
   opacity:0;
   transform: translateY(6px);
@@ -42,7 +41,6 @@ body{
 }
 .page.is-loaded{ opacity:1; transform: translateY(0); }
 
-/* Paper grain overlay */
 body::before{
   content:"";
   position:fixed;
@@ -56,7 +54,6 @@ body::before{
   mix-blend-mode:multiply;
 }
 
-/* Text max width (editorial) */
 .container{
   position:relative;
   z-index:1;
@@ -69,7 +66,6 @@ body::before{
     max(18px, env(safe-area-inset-left));
 }
 
-/* Topbar */
 .topbar{
   display:flex;
   justify-content:space-between;
@@ -98,54 +94,46 @@ body::before{
 }
 .contact:hover::after{transform:scaleX(1)}
 
-/* --- Sticky categories + refinement --- */
 .stickyCats{
   position:sticky;
   top:0;
   z-index:10;
   padding-top:10px;
   margin-top:-10px;
-
-  /* base paper wash */
   background:linear-gradient(to bottom,
     var(--paperTint) 0%,
     rgba(244,241,232,.82) 70%,
     rgba(244,241,232,0) 100%);
   backdrop-filter: blur(6px);
-
   transition: padding .22s ease;
-  isolation:isolate; /* keep blend layers contained */
+  isolation:isolate;
 }
 
-/* ✅ Menu heat/gradient behind, not per-item */
+/* Daha asymmetric, 1 blob daha az */
 .stickyCats::before{
   content:"";
   position:absolute;
-  left:-10%;
-  right:-10%;
-  top:-20px;
-  height:160px;
+  left:-14%;
+  right:-8%;
+  top:-26px;
+  height:168px;
   z-index:-1;
-
-  /* messy but professional: a few blobs, not everywhere */
   background:
-    radial-gradient(140px 110px at 18% 58%, rgba(10,85,255,.32), transparent 70%),
-    radial-gradient(180px 130px at 46% 26%, rgba(10,85,255,.22), transparent 72%),
-    radial-gradient(170px 140px at 72% 70%, rgba(10,85,255,.18), transparent 74%),
-    radial-gradient(120px 95px at 86% 44%, rgba(255,135,80,.14), transparent 70%);
-  filter: blur(18px);
+    radial-gradient(170px 120px at 14% 72%, rgba(10,85,255,.30), transparent 72%),
+    radial-gradient(210px 135px at 52% 18%, rgba(10,85,255,.20), transparent 74%),
+    radial-gradient(150px 120px at 87% 58%, rgba(255,135,80,.12), transparent 70%);
+  filter: blur(19px);
   opacity:.9;
-  transform: rotate(-4deg);
+  transform: rotate(-5deg);
   mix-blend-mode:multiply;
   pointer-events:none;
 }
 
-/* when compact, calm it down a bit */
 .stickyCats.is-compact{ padding-top:6px; }
 .stickyCats.is-compact::before{
-  height:120px;
+  height:124px;
   filter: blur(16px);
-  opacity:.75;
+  opacity:.74;
   transform: rotate(-3deg);
 }
 
@@ -187,7 +175,6 @@ body::before{
 }
 .categories a:hover::after{transform:scaleX(1)}
 
-/* Entries */
 .entry{
   position:relative;
   padding:38px 0 46px;
@@ -209,7 +196,6 @@ body::before{
 }
 .entry:hover .entryLink{ transform: translateY(-1px); }
 
-/* DATE/READ */
 .meta{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -231,7 +217,6 @@ body::before{
   margin:0 0 6px;
 }
 
-/* ✅ Title optical alignment + tracking */
 .title{
   font-family:"EB Garamond", Georgia, serif;
   font-size:66px;
@@ -271,7 +256,6 @@ body::before{
   margin-top:14px;
 }
 
-/* Footer */
 .footer{
   padding:28px 0 0;
   display:flex;
@@ -302,7 +286,6 @@ body::before{
 }
 .footer a:hover::after{transform:scaleX(1)}
 
-/* Reveal */
 .reveal{
   opacity:0;
   transform: translateY(10px);
@@ -311,7 +294,6 @@ body::before{
 }
 .reveal.is-in{ opacity:1; transform: translateY(0); }
 
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce){
   body::before{display:none;}
   .page{opacity:1; transform:none; transition:none;}
@@ -324,7 +306,6 @@ body::before{
   .entry:hover .entryLink{transform:none;}
 }
 
-/* Mobile */
 @media(max-width:760px){
   .categories{font-size:26px}
   .stickyCats.is-compact .categories{font-size:22px}
@@ -334,9 +315,9 @@ body::before{
   .title{font-size:46px; letter-spacing:-0.028em;}
   .tags{font-size:16px}
   .stickyCats::before{
-    height:140px;
+    height:142px;
     filter: blur(16px);
-    opacity:.85;
+    opacity:.84;
   }
 }
 @media(max-width:420px){
@@ -347,9 +328,9 @@ body::before{
   .entry{padding:28px 0 34px}
   .footer{padding-top:22px}
   .stickyCats::before{
-    height:120px;
+    height:122px;
     filter: blur(14px);
-    opacity:.82;
+    opacity:.8;
   }
 }
 </style>
@@ -376,10 +357,10 @@ body::before{
         <a href="https://www.instagram.com/imecemasa/" target="_blank" rel="noopener">imece masa</a>
         <a href="https://www.hazarustun.digital/" target="_blank" rel="noopener">hudigital</a>
         <a href="https://hazarustun.com/category/makaleler/" target="_blank" rel="noopener">makaleler</a>
+        <a href="https://data-organism.vercel.app" target="_blank" rel="noopener">World Conflict Map</a>
       </nav>
     </div>
 
-    <!-- Entry 1 -->
     <section class="entry reveal">
       <div class="meta">
         <div>
@@ -402,7 +383,6 @@ body::before{
       <div class="tags">Photography, Monochrome, Gallery</div>
     </section>
 
-    <!-- Entry 2 -->
     <section class="entry reveal">
       <div class="meta">
         <div>
@@ -425,7 +405,6 @@ body::before{
       <div class="tags">Stories, Creative Writing, Magazine</div>
     </section>
 
-    <!-- Entry 3 -->
     <section class="entry reveal">
       <div class="meta">
         <div>
@@ -457,12 +436,10 @@ body::before{
 </div>
 
 <script>
-  // Loading fade
   window.addEventListener("load", () => {
     document.getElementById("page").classList.add("is-loaded");
   });
 
-  // Reveal
   (function(){
     const els = document.querySelectorAll(".reveal");
     const io = new IntersectionObserver((entries)=>{
@@ -476,7 +453,6 @@ body::before{
     els.forEach(el => io.observe(el));
   })();
 
-  // Sticky header refinement: compact on scroll
   (function(){
     const sticky = document.getElementById("stickyCats");
     const onScroll = () => {
@@ -487,7 +463,6 @@ body::before{
     window.addEventListener("scroll", onScroll, { passive:true });
   })();
 
-  // Footer year
   document.getElementById("y").textContent = new Date().getFullYear();
 </script>
 </body>
